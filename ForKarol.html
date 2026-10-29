@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#4a1423"><title>Mi amor, para ti</title>
+<!-- Importamos fuente manuscrita legible estilo pluma de tinta -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#581628;--blue:#4a1423;--lav:#e0b2c6;--cream:#f2ebd9;--paper:#f5efe3;--ink:#352d43;--gold:#d6bc86}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:Georgia,"Times New Roman",serif;background:radial-gradient(ellipse at 50% 30%,#61182c 0%,#4a1423 55%,#260810 100%);display:flex;align-items:center;justify-content:center;padding:22px 12px;overflow:hidden}
+body:before{content:"";position:fixed;inset:12px;border:1px solid #e0b2c644;pointer-events:none;z-index:0}
+
+/* Universo de Estrellitas */
+.star-field{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.star{position:absolute;color:#fff2d1;font-size:10px;opacity:0.2;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:0.1;transform:scale(0.7);filter:drop-shadow(0 0 2px #ffe599)}50%{opacity:1;transform:scale(1.4);filter:drop-shadow(0 0 10px #ffffff)}}
+
+/* Universo de Corazones y Tulipanes Flotantes */
+.floating-bg-field{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.bg-float{position:absolute;opacity:0;animation:floatUniverse 8s ease-in-out infinite}
+@keyframes floatUniverse{
+  0%{opacity:0;transform:translateY(105vh) scale(0.5) rotate(0deg);}
+  30%{opacity:0.7;}
+  70%{opacity:0.7;}
+  100%{opacity:0;transform:translateY(-10vh) scale(1.4) rotate(45deg);filter:drop-shadow(0 0 8px rgba(255,182,193,0.8));}
+}
+
+/* Ráfaga interactiva de corazoncitos por cursor */
+.trail-heart{position:fixed;pointer-events:none;z-index:9999;font-size:16px;animation:trailAnim 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards}
+@keyframes trailAnim{
+  0%{opacity:1;transform:translate(-50%, -50%) scale(0.6) translateY(0);}
+  100%{opacity:0;transform:translate(-50%, -50%) scale(1.4) translateY(-45px) rotate(15deg);}
+}
+
+.shell{position:relative;z-index:1;width:min(980px,100%);text-align:center}h1{font-size:clamp(30px,6vw,50px);font-weight:normal;color:#fff3df;margin:0 0 16px;letter-spacing:1px;font-family:Georgia,"Times New Roman",serif}
+.book-area{perspective:1800px;display:flex;justify-content:center}.book{position:relative;width:min(700px,96vw);height:clamp(520px,75vh,660px);transform-style:preserve-3d;filter:drop-shadow(0 24px 22px #080d1c88)}
+
+/* Papel Arrugado Vintage */
+.inside{position:absolute;inset:0;background-color:#f5efe3;
+background-image: 
+  radial-gradient(ellipse at 10% 15%, rgba(160, 130, 90, 0.25) 0%, transparent 45%),
+  radial-gradient(ellipse at 90% 85%, rgba(150, 120, 80, 0.2) 0%, transparent 40%),
+  linear-gradient(135deg, rgba(120, 90, 50, 0.12) 0%, transparent 50%, rgba(140, 110, 70, 0.15) 100%),
+  linear-gradient(45deg, transparent 20%, rgba(110, 80, 40, 0.1) 40%, transparent 60%, rgba(160, 130, 90, 0.12) 80%),
+  radial-gradient(circle at 50% 50%, rgba(255,255,255,0.6) 0%, rgba(200, 175, 140, 0.3) 100%);
+border:1px solid #c8b493;border-radius:4px 12px 12px 4px;box-shadow:inset 16px 0 25px rgba(100,70,30,0.25);overflow:hidden}.inside:before{content:"";position:absolute;inset:13px;border:1px solid #b8a27d;pointer-events:none}
+
+/* Estilos de Páginas con Animación 3D y fuente manuscrita interior */
+.page{position:absolute;inset:0;padding:clamp(14px,2.5vw,26px) clamp(16px,4vw,36px) 35px;display:none;flex-direction:column;align-items:center;justify-content:center;
+transform-origin:left center;
+backface-visibility:hidden;
+transition:transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.8s ease-in-out;
+opacity:0;
+transform:rotateY(-20deg) scale(0.98);
+font-family:"Caveat", Georgia, serif;
+}
+.page.active{display:flex;opacity:1;transform:rotateY(0deg) scale(1)}
+.page.turn-next{display:flex;animation:pageFlipNext 0.75s ease-in-out forwards}
+.page.turn-prev{display:flex;animation:pageFlipPrev 0.75s ease-in-out forwards}
+
+@keyframes pageFlipNext{
+  0%{transform:rotateY(0deg);opacity:1}
+  50%{transform:rotateY(-60deg) scale(0.96);opacity:0.7}
+  100%{transform:rotateY(0deg);opacity:1}
+}
+
+@keyframes pageFlipPrev{
+  0%{transform:rotateY(0deg);opacity:1}
+  50%{transform:rotateY(60deg) scale(0.96);opacity:0.7}
+  100%{transform:rotateY(0deg);opacity:1}
+}
+
+.ornament{color:#7a4f5d;font-size:22px;margin-bottom:2px}
+.letter{white-space:pre-wrap;text-align:left;font-size:clamp(18px,2.3vw,22px);line-height:1.4;max-width:520px;max-height:100%;overflow:auto;padding:2px 4px;font-weight:500;color:#2b222d}
+.page-number{position:absolute;bottom:8px;color:#7a5a68;font-size:14px;width:100%;text-align:center}
+.page-title{font-size:clamp(25px,4vw,33px);font-weight:700;color:var(--navy);margin:0 0 2px;text-align:center}
+.page-intro{font-style:italic;margin:0 0 6px;text-align:center;color:#5a4758;font-size:17px}
+
+/* Video optimizado y más grande para PC y móvil */
+.video-container{width:100%;max-width:280px;height:165px;background:#1a1118;border:3px solid #fffaf0;border-radius:6px;box-shadow:0 4px 12px rgba(80,50,20,0.25);overflow:hidden;margin:4px auto;display:flex;align-items:center;justify-content:center}
+.video-container video{width:100%;height:100%;object-fit:cover;border-radius:4px}
+
+/* Contador de tiempo progresivo MÁS GRANDE y elegante */
+.counter-box{margin-top:8px;font-size:clamp(17px, 2.4vw, 21px);font-weight:700;color:#581628;background:rgba(224,178,198,0.35);padding:6px 16px;border-radius:999px;border:1.5px solid #c8a2bc;letter-spacing:1px;box-shadow:0 3px 8px rgba(80,50,20,0.15)}
+
+/* Fuente original en la Portada */
+.cover{position:absolute;inset:0;z-index:3;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.25s cubic-bezier(.2,.72,.15,1);cursor:pointer;border-radius:4px 12px 12px 4px;font-family:Georgia,"Times New Roman",serif}.cover-front,.cover-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:4px 12px 12px 4px}.cover-front{display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(135deg,#671b2f,#4a1423 62%,#2d0813);border:2px solid #b7a1d5;box-shadow:inset 0 0 0 9px #3a0d1b,inset 0 0 0 10px #b7a1d5}.cover-front:before{content:"";position:absolute;inset:24px;border:1px solid #d4c3e888}.cover-inner{position:relative;color:#fff0d6;max-width:440px}.cover-heart{font-size:37px;color:#c5a7e9;margin-bottom:17px}.cover-small{text-transform:uppercase;letter-spacing:.2em;font:11px Arial,sans-serif;color:#e0d4f1}.cover-title{font-size:clamp(34px,7vw,54px);line-height:1.1;font-weight:normal;margin:18px 0}.cover-rule{width:74px;height:1px;background:#d6bc86;margin:18px auto}.cover-sub{font-style:italic;font-size:18px;color:#e4eafa}.cover-prompt{font:12px Arial,sans-serif;letter-spacing:.08em;color:#e8d3b2;margin-top:26px}.cover-back{background:#e8ddf1;transform:rotateY(180deg);border:1px solid #b7a1d5}.book.open .cover{transform:rotateY(-180deg);pointer-events:none}
+
+/* Collage de 4 fotos grande y estético por página */
+.collage{display:grid;grid-template-columns:repeat(2, minmax(130px, 200px));grid-template-rows:repeat(2, minmax(110px, 155px));gap:12px;justify-content:center;align-content:center;width:100%;max-width:460px;margin:0 auto}
+.photo-frame{padding:5px 5px 16px;background:#fffaf0;border:1px solid #c8b493;box-shadow:0 4px 10px rgba(80,50,20,0.2);position:relative;transform:rotate(-1.5deg);width:100%;height:100%}
+.photo-frame:nth-child(2){transform:rotate(2deg)}
+.photo-frame:nth-child(3){transform:rotate(-2deg)}
+.photo-frame:nth-child(4){transform:rotate(1.5deg)}
+.photo-frame img{width:100%;height:100%;object-fit:contain;background:#f5efe3;display:block;border:1px solid #e0d1b5}
+.photo-frame:after{content:"♡";position:absolute;bottom:2px;left:0;right:0;text-align:center;color:#7a4f5d;font-size:13px}
+
+/* Marco individual grande para la foto 9 suelta */
+.single-photo{width:100%;max-width:260px;height:230px;margin:0 auto;padding:6px 6px 18px;background:#fffaf0;border:1px solid #c8b493;box-shadow:0 4px 12px rgba(80,50,20,0.25);position:relative;transform:rotate(1deg)}
+.single-photo img{width:100%;height:100%;object-fit:contain;background:#f5efe3;display:block;border:1px solid #e0d1b5}
+.single-photo:after{content:"♡";position:absolute;bottom:2px;left:0;right:0;text-align:center;color:#7a4f5d;font-size:14px}
+
+.memories{font-size:clamp(20px,3vw,25px);line-height:1.5;text-align:center;max-width:480px;color:#3b2d39;font-weight:500}
+.end-title{font-size:clamp(26px,4.5vw,36px);font-weight:700;color:var(--navy);margin:0 0 2px}
+.end-text{font-size:clamp(17px,2.2vw,21px);line-height:1.35;max-width:420px;font-weight:500;color:#3b2d39}
+.tulip-row{font-size:22px;letter-spacing:6px;margin-top:6px}
+.controls{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin:20px 0 0}button{border:1px solid #c5b0df;border-radius:999px;background:#f8f0ff;color:#26385e;padding:11px 18px;font:16px Arial,sans-serif;cursor:pointer;transition:transform .15s,background .15s}button:hover{transform:translateY(-1px);background:#fff}button.primary{background:#bda4dd;color:#1e2745;border-color:#e0d0f0}button:focus-visible{outline:3px solid white;outline-offset:3px}.note{font:12px Arial,sans-serif;color:#dce7f7;max-width:560px;margin:12px auto 0;letter-spacing:.5px}.audio-status{font:12px Arial,sans-serif;color:#e5d9f2;min-height:18px;margin-top:8px}
+
+@media(max-width:520px){
+  body{padding:16px 8px}
+  .book{height:580px}
+  .page{padding:16px 12px 30px}
+  .letter{font-size:16px;line-height:1.25}
+  .collage{grid-template-columns:repeat(2, minmax(110px, 150px));grid-template-rows:repeat(2, minmax(95px, 130px));gap:8px;height:280px}
+  .single-photo{max-width:210px;height:185px}
+  .controls button{padding:10px 14px;font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){.cover,.page,.bg-float{transition:none;animation:none}button{transition:none}}
+</style></head>
+<body>
+
+<!-- Universo Estelar -->
+<div class="star-field" aria-hidden="true">
+  <span class="star" style="top:5%; left:8%; animation-delay:0s; font-size:14px;">✦</span>
+  <span class="star" style="top:15%; left:25%; animation-delay:1.2s; font-size:18px;">★</span>
+  <span class="star" style="top:8%; left:50%; animation-delay:0.5s; font-size:12px;">✦</span>
+  <span class="star" style="top:12%; left:75%; animation-delay:2.1s; font-size:16px;">★</span>
+  <span class="star" style="top:5%; left:90%; animation-delay:0.8s; font-size:20px;">✦</span>
+  <span class="star" style="top:35%; left:3%; animation-delay:1.5s; font-size:15px;">★</span>
+  <span class="star" style="top:28%; left:95%; animation-delay:0.3s; font-size:13px;">✦</span>
+  <span class="star" style="top:55%; left:2%; animation-delay:2.4s; font-size:19px;">★</span>
+  <span class="star" style="top:60%; left:97%; animation-delay:1.1s; font-size:16px;">✦</span>
+  <span class="star" style="top:85%; left:5%; animation-delay:0.7s; font-size:14px;">★</span>
+  <span class="star" style="top:90%; left:22%; animation-delay:1.9s; font-size:18px;">✦</span>
+  <span class="star" style="top:88%; left:52%; animation-delay:0.4s; font-size:12px;">★</span>
+  <span class="star" style="top:92%; left:78%; animation-delay:2.2s; font-size:17px;">✦</span>
+  <span class="star" style="top:80%; left:94%; animation-delay:1.3s; font-size:15px;">★</span>
+</div>
+
+<!-- Universo de Tulipanes y Corazones Flotantes -->
+<div class="floating-bg-field" aria-hidden="true">
+  <span class="bg-float" style="left: 5%; animation-duration: 7s; animation-delay: 0s; font-size: 22px;">🌷</span>
+  <span class="bg-float" style="left: 15%; animation-duration: 9s; animation-delay: 2s; font-size: 18px;">❤️</span>
+  <span class="bg-float" style="left: 25%; animation-duration: 6s; animation-delay: 1s; font-size: 24px;">💜</span>
+  <span class="bg-float" style="left: 35%; animation-duration: 8s; animation-delay: 3s; font-size: 20px;">🌷</span>
+  <span class="bg-float" style="left: 45%; animation-duration: 10s; animation-delay: 0.5s; font-size: 19px;">💖</span>
+  <span class="bg-float" style="left: 55%; animation-duration: 7s; animation-delay: 2.5s; font-size: 26px;">🌷</span>
+  <span class="bg-float" style="left: 65%; animation-duration: 8.5s; animation-delay: 1.5s; font-size: 21px;">✨</span>
+  <span class="bg-float" style="left: 75%; animation-duration: 6.5s; animation-delay: 3.5s; font-size: 23px;">❤️</span>
+  <span class="bg-float" style="left: 85%; animation-duration: 9.5s; animation-delay: 0.8s; font-size: 25px;">🌷</span>
+  <span class="bg-float" style="left: 92%; animation-duration: 7.5s; animation-delay: 2.2s; font-size: 18px;">💜</span>
+</div>
+
+<main class="shell"><h1>Para ti, mi amor</h1>
+<section class="book-area" aria-label="Libro digital"><div class="book" id="book">
+<div class="inside">
+
+<!-- PÁGINA 1: La Carta -->
+<section class="page active" data-page="0"><div class="ornament">❦ 🌷 ❦</div><h2 class="page-title">Una carta para ti</h2><div class="letter">|Para el amor de mi vida|
+
+Hola, mi amor.
+
+Me gustaría comenzar esta carta agradeciendo al destino y a todas las elecciones que nos llevaron a conocernos.
+
+Hoy es tu día. Hace 18 años naciste para darle alegría a tus seres queridos y hoy, también, a tu novio. Quiero aprovechar este día tan especial para plasmar mi amor hacia ti, todo lo que sea necesario y todo lo que sea posible, porque te amo inmensamente.
+
+Te amo como el aire que se siente más puro cuando estamos juntos, como la noche que se vuelve aún más hermosa cuando aparecen las estrellas fugaces y podemos contemplarlas juntos. Porque, de alguna manera, todo parece más bonito cuando estoy contigo.
+
+Eres la mujer que quiero seguir conociendo durante toda mi vida, si me es posible. Quiero conocer cada parte de ti, tus pensamientos, tus sueños, tus alegrías y hasta esos pequeños detalles que te hacen ser la maravillosa mujer de la que me enamoré.
+
+Me enamoran tus maravillosos ojos, que iluminan mi alma, y tus hermosos labios, que besan mi corazón mientras yo beso el tuyo. Me encantas de una manera que a veces siento que las palabras no son suficientes para explicar.
+
+Te amo, mi amor. Feliz cumpleaños. Anhelo seguir celebrando tu existencia, acompañarte en tus días especiales y estar a tu lado mientras la vida nos permita compartir tantos momentos hermosos.
+
+Forever. Quiero seguir eligiéndote, seguir descubriéndote y seguir amándote, hoy, mañana y en cada uno de los días que tengamos la fortuna de compartir.
+
+Te amo, mi mujer. Me encantas, amor de mi vida. 💜
+
+- Con todo mi amor, tu novio Duvan. </div><div class="page-number">Con todo mi amor · 1</div></section>
+
+<!-- PÁGINA 2: Recuerdos Parte 1 (Fotos 1 a 4) -->
+<section class="page" data-page="1"><div class="ornament">✧ ♡ ✧</div><h2 class="page-title">Nuestros recuerdos</h2><p class="page-intro">Pequeños momentos que guardo en el corazón.</p><div class="collage">
+<div class="photo-frame"><img src="fotos/foto1.png" alt="Recuerdo 1"></div>
+<div class="photo-frame"><img src="fotos/foto2.png" alt="Recuerdo 2"></div>
+<div class="photo-frame"><img src="fotos/foto3.png" alt="Recuerdo 3"></div>
+<div class="photo-frame"><img src="fotos/foto4.png" alt="Recuerdo 4"></div>
+</div><div class="page-number">Nuestros recuerdos · 2</div></section>
+
+<!-- PÁGINA 3: Recuerdos Parte 2 (Fotos 5 a 8) -->
+<section class="page" data-page="2"><div class="ornament">✨ ♡ ✨</div><h2 class="page-title">Más momentos juntos</h2><p class="page-intro">Cada instante a tu lado es mi favorito.</p><div class="collage">
+<div class="photo-frame"><img src="fotos/foto5.png" alt="Recuerdo 5"></div>
+<div class="photo-frame"><img src="fotos/foto6.png" alt="Recuerdo 6"></div>
+<div class="photo-frame"><img src="fotos/foto7.png" alt="Recuerdo 7"></div>
+<div class="photo-frame"><img src="fotos/foto8.png" alt="Recuerdo 8"></div>
+</div><div class="page-number">Más momentos · 3</div></section>
+
+<!-- PÁGINA 4: Foto 9 (Sin texto superior ni título) -->
+<section class="page" data-page="3"><div class="ornament">♡ 🌷 ♡</div><div style="height: 12px;"></div><div class="single-photo">
+<img src="fotos/foto9.png" alt="Recuerdo 9">
+</div><div class="page-number">Instante especial · 4</div></section>
+
+<!-- PÁGINA 5: Lo bonito de nosotros -->
+<section class="page" data-page="4"><div class="ornament">♡</div><h2 class="page-title">🌷 💜</h2><p class="memories">Me gusta tener recuerdos contigo, desde los más grandes hasta esos pequeños detalles que quizá parecen simples, pero que para mí significan muchísimo.<br><br>Quiero seguir sumando momentos, fotografías, abrazos y razones para sonreír a tu lado.</p><div class="tulip-row">🌷 💜 🌷</div><div class="page-number">Un capítulo más · 5</div></section>
+
+<!-- PÁGINA 6: Final / Feliz cumpleaños mvd con video y contador grande -->
+<section class="page" data-page="5"><div class="ornament">❦ 💜 ❦</div><h2 class="end-title">Feliz cumpleaños mvd</h2><div class="video-container">
+<video controls preload="metadata" src="video.mp4">Tu navegador no soporta videos.</video>
+</div><p class="end-text">Gracias por existir y llenar mi vida de luz. Te amo con todo mi corazón.</p>
+<div class="counter-box" id="timeTogether">Calculando nuestro tiempo juntos...</div>
+<div class="tulip-row">🌷 💜 🌷</div><div class="page-number">Siempre tuyo · 6</div></section>
+
+</div>
+<div class="cover" id="cover" role="button" tabindex="0" aria-label="Abrir el libro"><div class="cover-front"><div class="cover-inner"><div class="cover-heart">♡ 🌷</div><div class="cover-small">Para la dueña de mi corazón</div><div class="cover-title">Mi amor,<br>para ti</div><div class="cover-rule"></div><div class="cover-sub">Una carta, nuestros recuerdos y mi voz</div><div class="tulip-row">🌷 💜 🌷</div><div class="cover-prompt">TOCA PARA ABRIR</div></div></div><div class="cover-back"></div></div>
+</div></section>
+<div class="controls"><button class="primary" id="openBtn">♡ Abrir el libro</button><button id="prevBtn">← Anterior</button><button id="nextBtn">Siguiente →</button><button id="audioBtn">▶ Escuchar mi voz</button><button id="closeBtn">Cerrar libro</button></div><div class="audio-status" id="audioStatus" aria-live="polite">Tu grabación está incluida. Pulsa el botón para escucharla.</div><p class="note">Pasa las páginas para ver tus recuerdos y escucha mi voz cuando quieras.</p><audio id="voice" preload="metadata" src="voz.mp3"></audio></main>
+
+<script>
+const book=document.getElementById('book'),cover=document.getElementById('cover'),pages=[...document.querySelectorAll('.page')];
+const openBtn=document.getElementById('openBtn'),closeBtn=document.getElementById('closeBtn'),nextBtn=document.getElementById('nextBtn'),prevBtn=document.getElementById('prevBtn');
+const audioBtn=document.getElementById('audioBtn'),audio=document.getElementById('voice'),status=document.getElementById('audioStatus');
+let current=0;
+
+// Sonido de hoja real acústico y ultra sutil mediante Web Audio API
+function playSoftPageSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    
+    const bufferSize = audioCtx.sampleRate * 0.12;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = buffer.getChannelData(0);
+    
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    
+    const whiteNoise = audioCtx.createBufferSource();
+    whiteNoise.buffer = buffer;
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1200;
+    filter.Q.value = 1.5;
+    
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    
+    whiteNoise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    whiteNoise.start();
+  } catch(e) {}
+}
+
+function openBook(){book.classList.add('open')}
+
+function showPage(n, direction = 'next'){
+  const targetIndex = Math.max(0, Math.min(pages.length-1, n));
+  if(targetIndex === current && pages[current].classList.contains('active')) return;
+
+  playSoftPageSound();
+
+  pages.forEach(p => p.classList.remove('active', 'turn-next', 'turn-prev'));
+
+  const animClass = direction === 'next' ? 'turn-next' : 'turn-prev';
+  pages[targetIndex].classList.add('active', animClass);
+
+  setTimeout(() => {
+    pages[targetIndex].classList.remove(animClass);
+  }, 750);
+
+  current = targetIndex;
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === pages.length - 1;
+  nextBtn.textContent = current === pages.length - 1 ? 'Fin ♡' : 'Siguiente →';
+}
+
+function closeBook(){
+  book.classList.remove('open');
+  if(!audio.paused){audio.pause();audio.currentTime=0;audioBtn.textContent='▶ Escuchar mi voz'}
+  document.querySelectorAll('video').forEach(v => { v.pause(); });
+}
+
+// CORREGIDO: Al abrir el libro o presionar Abrir/Siguiente, inicia directamente en la página 0 (La Carta)
+cover.addEventListener('click', () => { openBook(); showPage(0, 'next'); });
+cover.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); openBook(); showPage(0, 'next');}});
+openBtn.addEventListener('click', () => { openBook(); showPage(0, 'next'); });
+
+closeBtn.addEventListener('click',closeBook);
+nextBtn.addEventListener('click',()=>{openBook();showPage(current+1, 'next')});
+prevBtn.addEventListener('click',()=>showPage(current-1, 'prev'));
+
+audioBtn.addEventListener('click',async()=>{openBook();if(audio.error){status.textContent='No se pudo encontrar «voz.mp3». Comprueba que esté junto al libro.';return}try{if(audio.paused){await audio.play();audioBtn.textContent='Ⅱ Pausar mi voz';status.textContent='Reproduciendo tu grabación…'}else{audio.pause();audioBtn.textContent='▶ Escuchar mi voz';status.textContent='Audio en pausa.'}}catch(e){status.textContent='No se pudo reproducir el audio. Comprueba que «voz.mp3» esté junto al libro.'}});
+audio.addEventListener('ended',()=>{audioBtn.textContent='▶ Escuchar mi voz';status.textContent='Puedes volver a escuchar la carta cuando quieras.'});showPage(0);
+
+/* Contador progresivo en tiempo real (Calculado desde el 15 de febrero de 2024) */
+function updateCounter() {
+  const startDate = new Date(2024, 1, 15, 0, 0, 0); 
+  const now = new Date();
+  
+  let years = now.getFullYear() - startDate.getFullYear();
+  let months = now.getMonth() - startDate.getMonth();
+  let days = now.getDate() - startDate.getDate();
+  let hours = now.getHours() - startDate.getHours();
+  let minutes = now.getMinutes() - startDate.getMinutes();
+  let seconds = now.getSeconds() - startDate.getSeconds();
+
+  if (seconds < 0) { seconds += 60; minutes--; }
+  if (minutes < 0) { minutes += 60; hours--; }
+  if (hours < 0) { hours += 24; days--; }
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  const counterEl = document.getElementById('timeTogether');
+  if(counterEl) {
+    counterEl.textContent = `♡ ${years}a ${months}m ${days}d ${hours}h ${minutes}m ${seconds}s ♡`;
+  }
+}
+setInterval(updateCounter, 1000);
+updateCounter();
+
+/* Ráfaga interactiva de corazones al mover el cursor o tocar */
+let lastSpawn = 0;
+const icons = ['💜', '💖', '✨', '🌷', '❤️'];
+window.addEventListener('mousemove', (e) => {
+  const now = Date.now();
+  if (now - lastSpawn > 150) {
+    spawnParticle(e.clientX, e.clientY);
+    lastSpawn = now;
+  }
+});
+
+window.addEventListener('click', (e) => {
+  for(let i=0; i<4; i++) {
+    spawnParticle(e.clientX + (Math.random()*40 - 20), e.clientY + (Math.random()*40 - 20));
+  }
+});
+
+function spawnParticle(x, y) {
+  const el = document.createElement('span');
+  el.className = 'trail-heart';
+  el.textContent = icons[Math.floor(Math.random() * icons.length)];
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}
+</script>
+</body>
+</html>
